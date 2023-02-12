@@ -12,6 +12,9 @@ x-base-app: &base_app
       - db
   env_file:
     - .env
+  environment:
+    CABLE_REDIS: ${CABLE_REDIS:-redis://redis:6379/1}
+    CACHE_REDIS: ${CACHE_REDIS:-redis://redis:6379/2}
   image: rails_base
   tmpfs:
     - /opt/app/tmp:uid=${CONTAINER_UID},gid=${CONTAINER_GID}
@@ -46,6 +49,17 @@ services:
   guard:
     <<: *base_app
     command: ["bundle", "exec", "guard"]
+  redis:
+    command: ["redis-server", "--save", "60", "1", "--loglevel", "warning"]
+    image: redis:latest
+    volumes:
+      - type: volume
+        source: redis_data
+        target: /data
+      - type: bind
+        source: ./config
+        target: /usr/local/etc/redis
 volumes:
   db_data: {}
   gem_cache: {}
+  redis_data: {}

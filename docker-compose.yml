@@ -1,0 +1,48 @@
+---
+x-base-app: &base_app
+  build:
+    args:
+      CONTAINER_GID: ${CONTAINER_GID:-3434}
+      CONTAINER_UID: ${CONTAINER_UID:-3434}
+      CONTAINER_USER: ${CONTAINER_USER:-app_user}
+      RUBY_VERSION: ${RUBY_VERSION:-3.2}
+    context: .
+    dockerfile: Dockerfile
+  depends_on:
+      - db
+  env_file:
+    - .env
+  image: rails_base
+  tmpfs:
+    - /opt/app/tmp:uid=${CONTAINER_UID},gid=${CONTAINER_GID}
+  tty: true
+  volumes:
+    - type: bind
+      source: .
+      target: /opt/app
+    - type: volume
+      source: gem_cache
+      target: /bundle
+
+services:
+  app:
+    <<: *base_app
+    command: ["./bin/dev"]
+    ports:
+      - "8000:8000"
+  db:
+    image: postgres:${POSTGRES_VERSION}
+    env_file:
+      - .env
+    ports:
+      - "5432:5432"
+    volumes:
+      - type: volume
+        source: db_data
+        target: /var/lib/postgresql/data
+  guard:
+    <<: *base_app
+    command: ["bundle", "exec", "guard"]
+volumes:
+  db_data: {}
+  gem_cache: {}

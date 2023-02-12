@@ -1,3 +1,6 @@
 /log
 /bundle
 /tmp
+/rubycritic/*
+!/rubycritic/.keep
+.env*

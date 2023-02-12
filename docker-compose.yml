@@ -23,6 +23,9 @@ x-base-app: &base_app
     - type: volume
       source: gem_cache
       target: /bundle
+    - type: bind
+      source: ./rubycritic
+      target: /opt/app/tmp/rubycritic
 
 services:
   app:

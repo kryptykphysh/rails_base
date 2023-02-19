@@ -1,24 +1,10 @@
-# README
+# Base Rails
+The purpose of this repo is to serve as a Rails basic setup with a local Docker
+ environment.
 
-This README would normally document whatever steps are necessary to get the
-application up and running.
-
-Things you may want to cover:
-
-* Ruby version
-
-* System dependencies
-
-* Configuration
-
-* Database creation
-
-* Database initialization
-
-* How to run the test suite
-
-* Services (job queues, cache servers, search engines, etc.)
-
-* Deployment instructions
-
-* ...
+# Setup
+- Copy the `example.env` env file to `.env`.
+- Update your container user vars in `.env` to values returned by your
+ system's `id` command.
+- run `docker-compose --rm app ./bin/setup`.
+- Profit.

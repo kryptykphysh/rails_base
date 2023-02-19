@@ -2,7 +2,7 @@ ARG CONTAINER_GID=3434 \
     CONTAINER_UID=3434 \
     CONTAINER_USER=app_user \
     POSTGRES_VERSION=15 \
-    RUBY_VERSION=3.2
+    RUBY_VERSION=3.2.1
 
 FROM ruby:${RUBY_VERSION}-bullseye
 
@@ -25,9 +25,13 @@ RUN apt-get update \
         libpq-dev \
         postgresql-${POSTGRES_VERSION} \
     && rm -rf /var/lib/apt/lists/* \
+    && echo "GEM_HOME=/bundle/ruby/${RUBY_VERSION}/gems" >> /opt/app/.gemrc \
+    && echo "GEM_PATH=/bundle/ruby/${RUBY_VERSION}/gems;${GEM_PATH}" >> /opt/app.gemrc \
     && addgroup --gid ${CONTAINER_GID} ${CONTAINER_USER} \
     && adduser --shell /bin/bash --uid ${CONTAINER_UID} --gid ${CONTAINER_GID} ${CONTAINER_USER} \
     && chown -R ${CONTAINER_USER}:${CONTAINER_USER} /opt/app \
+    && mkdir /bundle \
+    && chown -R ${CONTAINER_USER}:${CONTAINER_USER} /bundle \
     && gem update --system
 
 ADD --chown=${CONTAINER_USER}:${CONTAINER_USER} ./Gemfile* /opt/app/ 
@@ -35,10 +39,5 @@ ADD --chown=${CONTAINER_USER}:${CONTAINER_USER} ./Gemfile* /opt/app/
 USER ${CONTAINER_USER}
 
 SHELL ["/bin/bash", "-c"]
-
-VOLUME ["/bundle"]
-
-RUN bundle config local --path /bundle \
-    && bundle install
 
 CMD ["./bin/dev"]

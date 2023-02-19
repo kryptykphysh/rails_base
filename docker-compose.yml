@@ -5,7 +5,7 @@ x-base-app: &base_app
       CONTAINER_GID: ${CONTAINER_GID:-3434}
       CONTAINER_UID: ${CONTAINER_UID:-3434}
       CONTAINER_USER: ${CONTAINER_USER:-app_user}
-      RUBY_VERSION: ${RUBY_VERSION:-3.2}
+      RUBY_VERSION: ${RUBY_VERSION:-3.2.1}
     context: .
     dockerfile: Dockerfile
   depends_on:

@@ -4,3 +4,4 @@
 /rubycritic/*
 !/rubycritic/.keep
 .env*
+.gemrc

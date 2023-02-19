@@ -16,7 +16,7 @@ FileUtils.chdir APP_ROOT do
   puts "== Installing dependencies =="
   system! "gem install bundler --conservative"
   system("bundle check") || system!("bundle install")
-  system("bundle binstubs guard") unless ENV["RAILS_ENV"] == "production" 
+  system("bundle binstubs cucumber guard rspec standard") unless ENV["RAILS_ENV"] == "production" 
 
   # puts "\n== Copying sample files =="
   # unless File.exist?("config/database.yml")

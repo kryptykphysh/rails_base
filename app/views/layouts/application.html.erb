@@ -12,6 +12,13 @@
   </head>
 
   <body>
+    <% if current_user %>
+      Logged in as <%= current_user.email %>
+      <%= link_to "Logout", logout_path, method: :delete %>
+    <% else %>
+      <%= link_to "Register", new_user_path %>
+      <%= link_to "Login", login_path %>
+    <% end %>
     <main class="container mx-auto mt-28 px-5 flex">
       <%= yield %>
     </main>
